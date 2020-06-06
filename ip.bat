@@ -1,18 +1,18 @@
-:: è®¾ç½®é™æ€IPåœ°å€
+:: ÉèÖÃ¾²Ì¬IPµØÖ·
 
-:: ip set addressæ˜¯è®¾ç½®IPåœ°å€
-:: name=â€œæœ¬åœ°è¿æ¥â€æ˜¯æŒ‡ä½ ç”¨é‚£ä¸ªè¿æ¥ä¸Šç½‘çš„ï¼Œæ¯ä¸ªäººçš„ç”µè„‘ä¸åŒï¼Œæ ¹æ®è‡ªå·±çš„æƒ…å†µæ¥ä¿®æ”¹
-:: source=staticæ˜¯æŒ‡ï¼Œä½ è®¾ç½®çš„æ˜¯é™æ€IP
-:: addræ˜¯æŒ‡IPåœ°å€
-:: maskæŒ‡å­ç½‘æ©ç 
-:: gatewayæŒ‡é»˜è®¤ç½‘å…³
-netsh interface ip set address name="æœ¬åœ°è¿æ¥" source=static addr=10.101.192.3 mask=255.255.255.0 gateway=10.101.192.1
+:: ip set addressÊÇÉèÖÃIPµØÖ·
+:: name=¡°±¾µØÁ¬½Ó¡±ÊÇÖ¸ÄãÓÃÄÇ¸öÁ¬½ÓÉÏÍøµÄ£¬Ã¿¸öÈËµÄµçÄÔ²»Í¬£¬¸ù¾İ×Ô¼ºµÄÇé¿öÀ´ĞŞ¸Ä
+:: source=staticÊÇÖ¸£¬ÄãÉèÖÃµÄÊÇ¾²Ì¬IP
+:: addrÊÇÖ¸IPµØÖ·
+:: maskÖ¸×ÓÍøÑÚÂë
+:: gatewayÖ¸Ä¬ÈÏÍø¹Ø
+netsh interface ip set address name="±¾µØÁ¬½Ó" source=static addr=10.101.192.3 mask=255.255.255.0 gateway=10.101.192.1
 
-:: ip set dnsæ˜¯æŒ‡è®¾ç½®DNSæœåŠ¡å™¨åœ°å€
-:: addræ˜¯é¦–é€‰DNSæœåŠ¡å™¨
-netsh interface ip set dns name="æœ¬åœ°è¿æ¥" source=static addr=202.196.64.1
+:: ip set dnsÊÇÖ¸ÉèÖÃDNS·şÎñÆ÷µØÖ·
+:: addrÊÇÊ×Ñ¡DNS·şÎñÆ÷
+netsh interface ip set dns name="±¾µØÁ¬½Ó" source=static addr=202.196.64.1
 
-:: è®¾ç½®åŠ¨æ€IPåœ°å€
-:: é€šè¿‡DHCPè·å–IPåœ°å€
-netsh interface ip set address name="æœ¬åœ°è¿æ¥" source=dhcp
-netsh interface ip set dns name="æœ¬åœ°è¿æ¥" source=dhcp
+:: ÉèÖÃ¶¯Ì¬IPµØÖ·
+:: Í¨¹ıDHCP»ñÈ¡IPµØÖ·
+netsh interface ip set address name="±¾µØÁ¬½Ó" source=dhcp
+netsh interface ip set dns name="±¾µØÁ¬½Ó" source=dhcp
