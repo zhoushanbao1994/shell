@@ -2,24 +2,24 @@
 # 非标准Linux，BusyBox v1.27.0 (2017-07-09 22:05:31 CST)专用
 
 echo "*****************************************************************************************"
-#进程名称CCU
-PRO_NAME=CCU
+#进程名称守护
+PRO2_NAME=daemon.sh
 #用ps获取$PRO_NAME进程数量
-NUM=`ps aux | grep -w ${PRO_NAME} | grep -v grep |wc -l`
+NUM=`ps aux | grep -w ${PRO2_NAME} | grep -v grep |wc -l`
 #进程数量大于0，杀掉进程
 if [ "${NUM}" -gt "0" ];then
-	echo "Existing process: ${PRO_NAME},Killall ${PRO_NAME}"
-	killall -9 ${PRO_NAME}
+	echo "Existing process: ${PRO2_NAME},Killall ${PRO2_NAME}"
+	killall -9 ${PRO2_NAME}
 fi
 echo "*****************************************************************************************"
-#进程名称守护
-PRO_NAME=daemon.sh
+#进程名称CCU
+PRO1_NAME=CCU
 #用ps获取$PRO_NAME进程数量
-NUM=`ps aux | grep -w ${PRO_NAME} | grep -v grep |wc -l`
+NUM=`ps aux | grep -w ${PRO1_NAME} | grep -v grep |wc -l`
 #进程数量大于0，杀掉进程
 if [ "${NUM}" -gt "0" ];then
-	echo "Existing process: ${PRO_NAME},Killall ${PRO_NAME}"
-	killall -9 ${PRO_NAME}
+	echo "Existing process: ${PRO1_NAME},Killall ${PRO1_NAME}"
+	killall -9 ${PRO1_NAME}
 fi
 
 echo "*****************************************************************************************"
@@ -56,11 +56,53 @@ tftp_server_ip=192.168.1.253
 file_name_1=CCU				# CCU可执行文件
 file_name_2=daemon.sh		# 守护进程脚本
 file_name_3=lib.zip			# libmodbus库文件
-echo TFTP传输文件
+echo TFTP Start
 tftp -g -r $file_name_1 $tftp_server_ip
-tftp -g -r $file_name_2 $tftp_server_ip
+#tftp -g -r $file_name_2 $tftp_server_ip
 tftp -g -r $file_name_3 $tftp_server_ip
-echo TFTP传输文件结束
+echo TFTP End
+
+# 守护进程脚本（Win传过去存在编码问题，直接写文件）
+# 内部有许多转义字符的使用
+cat>$file_name_2<<EOF
+#! /bin/sh
+
+#进程名称
+PRO_NAME=CCU
+# 重启进程时可执行文件的路径
+PRO_PATH=/mnt/mmcblk0p3/CCU/
+
+while true ;
+do
+	sleep 3s
+	
+	#用ps获取$PRO_NAME进程数量
+	NUM=\`ps aux | grep -w \${PRO_PATH}\${PRO_NAME} | grep -v grep |wc -l\`
+	echo \$NUM
+
+	#少于1，重启进程
+	if [ "\${NUM}" -lt "1" ];then
+		echo "\${PRO_NAME} was killed"
+		nohup \${PRO_PATH}\${PRO_NAME} >/dev/null 2>&1 &
+	#大于1，杀掉所有进程，重启
+	elif [ "\${NUM}" -gt "1" ];then
+		echo "more than 1 \${PRO_NAME},killall \${PRO_NAME}"
+		killall -9 \${PRO_NAME}
+		nohup \${PRO_PATH}\${PRO_NAME} >/dev/null 2>&1 &
+	fi
+
+	kill僵尸进程
+	NUM_STAT=\`ps aux | grep -w \${PRO_PATH}\${PRO_NAME} | grep T | grep -v grep | wc -l\`
+	if [ "\${NUM_STAT}" -gt "0" ];then
+		killall -9 \${PRO_NAME}
+		nohup \${PRO_PATH}\${PRO_NAME} >/dev/null 2>&1 &
+	fi
+
+	sleep 3s
+done
+ 
+exit 0
+EOF
 
 # 设置文件权限
 echo Setting permissions:$file_name_1
@@ -79,8 +121,8 @@ cp lib/libmodbus.so lib/libmodbus.so.5 lib/libmodbus.so.5.0.5 /usr/lib/
 # 用户输入（IP地址的最后一个字节）
 # 警告：此地址不要输错，否则可能无法连接设备
 echo "*****************************************************************************************"
-echo "Warning: Do not enter this address incorrectly, otherwise the device may not be connected"
-echo "If you don't know the rules, you can exit with \"Ctrl+Z\""
+echo -e "\033[31m Warning: Do not enter this address incorrectly, otherwise the device may not be connected \033[0m" 
+echo -e "\033[31m If you don't know the rules, you can exit with \"Ctrl+Z\" \033[0m" 
 echo "*****************************************************************************************"
 read -p "Set Ip Last one: " ip
 eth0_ip=192.168.1.$ip
