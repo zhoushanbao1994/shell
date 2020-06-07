@@ -112,7 +112,11 @@ chmod 755 $file_name_2
 
 # 解压库文件
 echo Unzip files:$file_name_3
-unzip $file_name_3
+lib_folder_name=lib/
+# 如果库文件夹不存在，解压库文件
+if [ ! -d $lib_folder_name ]; then
+	unzip $file_name_3
+fi
 # 拷贝库文件至系统目录
 cp lib/libmodbus.so lib/libmodbus.so.5 lib/libmodbus.so.5.0.5 /usr/lib/
 
