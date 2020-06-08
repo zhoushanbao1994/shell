@@ -91,7 +91,7 @@ do
 		nohup \${PRO_PATH}\${PRO_NAME} >/dev/null 2>&1 &
 	fi
 
-	kill僵尸进程
+	#kill僵尸进程
 	NUM_STAT=\`ps aux | grep -w \${PRO_PATH}\${PRO_NAME} | grep T | grep -v grep | wc -l\`
 	if [ "\${NUM_STAT}" -gt "0" ];then
 		killall -9 \${PRO_NAME}
