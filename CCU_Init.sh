@@ -1,5 +1,15 @@
 ##!/bin/bash
 # 非标准Linux，BusyBox v1.27.0 (2017-07-09 22:05:31 CST)专用
+# 注意文件Linux的编码格式（不要再Win下编辑）
+
+if [ -n "$1" ]; then
+	echo "IP "$1
+else
+	exit
+fi
+
+# IP的最后一位
+END_IP=$1
 
 echo "*****************************************************************************************"
 #进程名称守护
@@ -128,7 +138,8 @@ echo "**************************************************************************
 echo -e "\033[31m Warning: Do not enter this address incorrectly, otherwise the device may not be connected \033[0m" 
 echo -e "\033[31m If you don't know the rules, you can exit with \"Ctrl+Z\" \033[0m" 
 echo "*****************************************************************************************"
-read -p "Set Ip Last one: " ip
+#read -p "Set Ip Last one: " ip
+ip=$END_IP
 eth0_ip=192.168.1.$ip
 eth1_ip=192.169.1.$ip
 echo eth0 $eth0_ip
@@ -181,6 +192,9 @@ cat>$start_file_name<<EOF
 	# Daemon
 	$work_path/$file_name_2 &
 EOF
+# 增加权限
+chmod 755 $start_file_name
 
 echo end
 echo "*****************************************************************************************"
+
