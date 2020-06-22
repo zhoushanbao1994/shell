@@ -58,6 +58,7 @@ set /p ip_addr=ÊäÈëIP:
 for /f "tokens=1,2,3,4 delims=. " %%a in ('echo %ip_addr%') do (
 	echo %%a %%b %%c %%d
 	set ip_gateway_temp=%%a.%%b.%%c.1
+	set ip_gateway_temp=
 )
 :: ÊäÈë×ÓÍøÑÚÂë
 set ip_mask_temp=255.255.255.0
