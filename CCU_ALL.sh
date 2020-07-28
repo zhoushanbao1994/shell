@@ -1,35 +1,53 @@
 #!/bin/sh
 # 注意文件Linux的编码格式（不要再Win下编辑）
 
-if [ -n "$1" ]; then
-	echo "start ip "$1
-else
-	echo "start ip null"
-	exit
+# 输入Tftp Server Ip
+tftp_server_default_ip="192.168.1.253"
+read -p "输入 tftp server ip[默认为$tftp_server_default_ip]:" tftp_server_ip
+if  [ ! -n "$tftp_server_ip" ] ;then
+	# 输入值为空，使用默认值
+	tftp_server_ip=$tftp_server_default_ip
 fi
-if [ -n "$2" ]; then
-	echo "end ip "$2
-else
-	echo "end ip null"
-	exit
+echo Tftp Server Ip $tftp_server_ip
+
+device_default_network="192.168.1"
+device_default_start_ip="101"
+device_default_end_ip="188"
+
+echo "默认网段:"$device_default_network
+
+# 输入更新程序板子的起始地址
+read -p "输入更新程序板子的起始ip的最后一位[默认为$device_default_start_ip]:" device_start_ip
+if  [ ! -n "$device_start_ip" ] ;then
+        # 输入值为空，使用默认值
+	device_start_ip=$device_default_start_ip
 fi
+
+# 输入c更新程序板子的截至地址
+read -p "输入更新程序板子的起始ip的最后一位[默认为$device_default_end_ip]:" device_end_ip
+if  [ ! -n "$device_end_ip" ] ;then
+	# 输入值为空，使用默认值
+	device_end_ip=$device_default_end_ip
+fi
+
+echo $device_default_network.$device_start_ip - $device_default_network.$device_end_ip
 
 # Telnet的用户密码
 username="root"
 password="root"
 
-Cmd1="tftp -g -r CCU_Init.sh 192.168.1.253"
+Cmd1="tftp -g -r CCU_Init.sh "$tftp_server_ip
 Cmd2="chmod 755 CCU_Init.sh"
 Cmd3="ls"
-Cmd4="./CCU_Init.sh"
+Cmd4="./CCU_Init.sh "
 Cmd5="reboot"
 
 # 循环访问设备，执行命令
-for i in `seq $1 $2`
+for i in `seq $device_start_ip $device_end_ip`
 do
 	echo ""
 	echo ""
-	ip='192.168.1.'$i
+	ip=$device_default_network.$i
 	echo "\033[31m ***************************************** $ip **************************************** \033[0m" 
 	echo "\033[32m ***************************************** $ip **************************************** \033[0m" 
 	echo "\033[33m ***************************************** $ip **************************************** \033[0m" 
@@ -53,7 +71,7 @@ do
 		echo $Cmd3;
 		sleep 1;
 		# 执行Init脚本
-		echo $Cmd4 $i
+		echo $Cmd4 $i $tftp_server_ip 
 		sleep 5;
 		echo $Cmd5
 		sleep 2;
