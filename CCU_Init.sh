@@ -3,19 +3,26 @@
 # 注意文件Linux的编码格式（不要再Win下编辑）
 
 if [ -n "$1" ]; then
-	echo "IP "$1
+	set_tftp_server_ip=$1
+	echo "tftp server ip "$tftp_server_ip
 else
 	exit
 fi
 
 if [ -n "$2" ]; then
-        echo "Tftp Server IP "$2
+	set_eth0_ip=$2
+        echo "set eth0 ip "$set_eth0_ip
 else
         exit
 fi
 
-# IP的最后一位
-END_IP=$1
+if [ -n "$3" ]; then
+        set_eth1_ip=$3
+	echo "set eth1 ip "$set_eth1_ip
+else
+	exit
+fi
+
 
 echo "*****************************************************************************************"
 #进程名称守护
@@ -68,9 +75,9 @@ work_path=$(pwd)
 echo Current working path:$work_path
 
 # TFTP传输文件
-tftp_server_ip=$2
+tftp_server_ip=$set_tftp_server_ip
 file_name_1=CCU				# CCU可执行文件
-file_name_2=daemon.sh		# 守护进程脚本
+file_name_2=daemon.sh			# 守护进程脚本
 file_name_3=lib.zip			# libmodbus库文件
 echo TFTP Start
 tftp -g -r $file_name_1 $tftp_server_ip
@@ -146,10 +153,8 @@ echo "**************************************************************************
 echo -e "\033[31m Warning: Do not enter this address incorrectly, otherwise the device may not be connected \033[0m" 
 echo -e "\033[31m If you don't know the rules, you can exit with \"Ctrl+Z\" \033[0m" 
 echo "*****************************************************************************************"
-#read -p "Set Ip Last one: " ip
-ip=$END_IP
-eth0_ip=192.168.1.$ip
-eth1_ip=192.169.1.$ip
+eth0_ip=$set_eth0_ip
+eth1_ip=$set_eth1_ip
 echo eth0 $eth0_ip
 echo eth1 $eth1_ip
 
