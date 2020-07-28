@@ -8,6 +8,12 @@ else
 	exit
 fi
 
+if [ -n "$2" ]; then
+        echo "Tftp Server IP "$2
+else
+        exit
+fi
+
 # IP的最后一位
 END_IP=$1
 
@@ -62,7 +68,7 @@ work_path=$(pwd)
 echo Current working path:$work_path
 
 # TFTP传输文件
-tftp_server_ip=192.168.1.253
+tftp_server_ip=$2
 file_name_1=CCU				# CCU可执行文件
 file_name_2=daemon.sh		# 守护进程脚本
 file_name_3=lib.zip			# libmodbus库文件
