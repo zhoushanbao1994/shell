@@ -14,23 +14,29 @@ device_default_network="192.168.1"
 device_default_start_ip="101"
 device_default_end_ip="188"
 
-echo "默认网段:"$device_default_network
+# 输入登录板子的网段
+read -p "输入登录板子的网段[默认为$device_default_network]:" device_network
+if  [ ! -n "$device_network" ] ;then
+        # 输入值为空，使用默认值
+        device_network=$device_default_network
+fi
 
-# 输入更新程序板子的起始地址
-read -p "输入更新程序板子的起始ip的最后一位[默认为$device_default_start_ip]:" device_start_ip
+# 输入登录板子的起始地址
+read -p "输入登录板子的起始ip的最后一位[默认为$device_default_start_ip]:" device_start_ip
 if  [ ! -n "$device_start_ip" ] ;then
         # 输入值为空，使用默认值
 	device_start_ip=$device_default_start_ip
 fi
 
-# 输入c更新程序板子的截至地址
-read -p "输入更新程序板子的起始ip的最后一位[默认为$device_default_end_ip]:" device_end_ip
+# 输入登录板子的截至地址
+read -p "输入登录板子的起始ip的最后一位[默认为$device_default_end_ip]:" device_end_ip
 if  [ ! -n "$device_end_ip" ] ;then
 	# 输入值为空，使用默认值
 	device_end_ip=$device_default_end_ip
 fi
 
-echo $device_default_network.$device_start_ip - $device_default_network.$device_end_ip
+echo $device_network.$device_start_ip - $device_network.$device_end_ip
+
 
 # Telnet的用户密码
 username="root"
@@ -48,7 +54,7 @@ do
 	echo ""
 	echo ""
 	# 登录设备使用的IP
-	login_ip=$device_default_network.$i
+	login_ip=$device_network.$i
 	echo "\033[31m ***************************************** $login_ip **************************************** \033[0m" 
 	echo "\033[32m ***************************************** $login_ip **************************************** \033[0m" 
 	echo "\033[33m ***************************************** $login_ip **************************************** \033[0m" 
