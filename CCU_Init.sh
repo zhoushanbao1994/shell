@@ -4,8 +4,9 @@
 
 if [ -n "$1" ]; then
 	set_tftp_server_ip=$1
-	echo "tftp server ip "$tftp_server_ip
+	echo "tftp server ip "$set_ftp_server_ip
 else
+	echo "参数1：Tftp Server Ip 未设置"
 	exit
 fi
 
@@ -13,6 +14,7 @@ if [ -n "$2" ]; then
 	set_eth0_ip=$2
         echo "set eth0 ip "$set_eth0_ip
 else
+	echo "参数2：网口0要改为的Ip 未设置"
         exit
 fi
 
@@ -20,6 +22,7 @@ if [ -n "$3" ]; then
         set_eth1_ip=$3
 	echo "set eth1 ip "$set_eth1_ip
 else
+	echo "参数3：网口1要改为的Ip 未设置"
 	exit
 fi
 
