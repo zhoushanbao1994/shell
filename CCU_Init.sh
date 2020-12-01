@@ -82,12 +82,15 @@ tftp_server_ip=$set_tftp_server_ip
 file_name_1=CCU				# CCU可执行文件
 file_name_2=daemon.sh			# 守护进程脚本
 file_name_3=lib.zip			# libmodbus库文件
+file_name_4=log.conf		# 日志配置文件
 echo TFTP Start
 tftp -g -r $file_name_1 $tftp_server_ip
 #tftp -g -r $file_name_2 $tftp_server_ip
 if [ ! -f $file_name_3 ]; then	# 如果文件不存在
 	tftp -g -r $file_name_3 $tftp_server_ip
 fi
+tftp -g -r $file_name_4 $tftp_server_ip
+mkdir log
 echo TFTP End
 
 # 守护进程脚本（Win传过去存在编码问题，直接写文件）
